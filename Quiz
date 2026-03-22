@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MCQ Quiz</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    text-align: center;
+    color: white;
+}
+
+.box {
+    background: rgba(0,0,0,0.6);
+    width: 60%;
+    margin: auto;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 50px;
+}
+
+.page { display: none; }
+.active { display: block; }
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background: #ff7eb3;
+    color: white;
+    cursor: pointer;
+}
+</style>
+
+</head>
+<body>
+
+<div class="box">
+
+<h1>MCQ Quiz</h1>
+
+<!-- PAGE 1 -->
+<div id="p1" class="page active">
+<h2>Page 1</h2>
+
+<p>Q1. Output of printf("Hello")?</p>
+<input type="radio" name="q1" value="1"> Hello<br>
+<input type="radio" name="q1" value="0"> Error<br>
+
+<p>Q2. Comment symbol?</p>
+<input type="radio" name="q2" value="1"> //<br>
+<input type="radio" name="q2" value="0"> ##<br>
+
+<button onclick="next(2)">Next</button>
+</div>
+
+<!-- PAGE 2 -->
+<div id="p2" class="page">
+<h2>Page 2</h2>
+
+<p>Q3. Integer type?</p>
+<input type="radio" name="q3" value="1"> int<br>
+<input type="radio" name="q3" value="0"> float<br>
+
+<p>Q4. Input function?</p>
+<input type="radio" name="q4" value="1"> scanf<br>
+<input type="radio" name="q4" value="0"> printf<br>
+
+<button onclick="next(3)">Next</button>
+</div>
+
+<!-- PAGE 3 -->
+<div id="p3" class="page">
+<h2>Page 3</h2>
+
+<p>Q5. Loop?</p>
+<input type="radio" name="q5" value="1"> for<br>
+<input type="radio" name="q5" value="0"> if<br>
+
+<p>Q6. Array?</p>
+<input type="radio" name="q6" value="1"> Collection<br>
+<input type="radio" name="q6" value="0"> Function<br>
+
+<button onclick="next(4)">Next</button>
+</div>
+
+<!-- PAGE 4 -->
+<div id="p4" class="page">
+<h2>Page 4</h2>
+
+<p>Q7. Addition operator?</p>
+<input type="radio" name="q7" value="1"> +<br>
+<input type="radio" name="q7" value="0"> -<br>
+
+<p>Q8. Return keyword?</p>
+<input type="radio" name="q8" value="1"> return<br>
+<input type="radio" name="q8" value="0"> break<br>
+
+<button onclick="next(5)">Next</button>
+</div>
+
+<!-- PAGE 5 -->
+<div id="p5" class="page">
+<h2>Page 5</h2>
+
+<p>Q9. Header file?</p>
+<input type="radio" name="q9" value="1"> stdio.h<br>
+<input type="radio" name="q9" value="0"> math.h<br>
+
+<p>Q10. C is?</p>
+<input type="radio" name="q10" value="1"> Both<br>
+<input type="radio" name="q10" value="0"> Only High<br>
+
+<button onclick="result()">Submit</button>
+</div>
+
+<!-- RESULT -->
+<div id="result" class="page">
+<h2>Your Score</h2>
+<h1 id="score"></h1>
+</div>
+
+</div>
+
+<script>
+function next(p) {
+    document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+    document.getElementById('p' + p).classList.add('active');
+}
+
+function result() {
+    let score = 0;
+
+    for(let i = 1; i <= 10; i++) {
+        let ans = document.querySelector('input[name="q'+i+'"]:checked');
+        if(ans) score += parseInt(ans.value);
+    }
+
+    document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+    document.getElementById('result').classList.add('active');
+
+    document.getElementById('score').innerText = score + " / 10";
+}
+</script>
+
+</body>
+</html>
