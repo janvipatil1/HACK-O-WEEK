@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Printer Queue Simulator</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; background: #f0f4f8; }
+  h1 { color: #1e3a8a; text-align: center; }
+  .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  input { padding: 8px; width: 60%; margin-right: 5px; border-radius: 4px; border: 1px solid #ccc; }
+  button { padding: 8px 12px; border-radius: 4px; border: none; background: #1e3a8a; color: #fff; cursor: pointer; margin-right: 5px; }
+  button:hover { background-color: #374eb8; }
+  ul { padding-left: 20px; margin-top: 10px; }
+  li { margin-bottom: 5px; }
+  .message { font-weight: bold; color: #d97706; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<h1>Printer Queue Simulator</h1>
+<div class="container">
+  <input type="text" id="jobName" placeholder="Enter Job Name">
+  <button onclick="enqueueJob()">Add Job</button>
+  <button onclick="printJob()">Print Next</button>
+  <button onclick="peekJob()">Current Job</button>
+
+  <div class="message" id="message"></div>
+
+  <h3>Print Queue (FIFO)</h3>
+  <ul id="queueList"></ul>
+</div>
+
+<script>
+  // Initialize printer queue
+  let printerQueue = [];
+
+  function updateQueueDisplay() {
+    const list = document.getElementById('queueList');
+    list.innerHTML = "";
+    if (printerQueue.length === 0) {
+      list.innerHTML = "<li>Queue is empty.</li>";
+    } else {
+      printerQueue.forEach((job, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${index + 1}. ${job}`;
+        list.appendChild(li);
+      });
+    }
+  }
+
+  function enqueueJob() {
+    const job = document.getElementById('jobName').value.trim();
+    const message = document.getElementById('message');
+    if (!job) { message.textContent = "Enter a job name."; return; }
+    printerQueue.push(job);
+    message.textContent = `Job '${job}' added to the queue.`;
+    document.getElementById('jobName').value = "";
+    updateQueueDisplay();
+  }
+
+  function printJob() {
+    const message = document.getElementById('message');
+    if (printerQueue.length === 0) {
+      message.textContent = "No jobs in the queue to print.";
+      return;
+    }
+    const job = printerQueue.shift(); // dequeue FIFO
+    message.textContent = `Printing job: '${job}'`;
+    updateQueueDisplay();
+  }
+
+  function peekJob() {
+    const message = document.getElementById('message');
+    if (printerQueue.length === 0) {
+      message.textContent = "No jobs in the queue.";
+    } else {
+      message.textContent = `Next job to print: '${printerQueue[0]}'`;
+    }
+  }
+
+  updateQueueDisplay();
+</script>
+
+</body>
+</html>
