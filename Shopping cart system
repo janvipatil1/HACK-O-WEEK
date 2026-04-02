@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping Cart System</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9fafb; }
+  h1 { color: #1e3a8a; text-align: center; }
+  .container { max-width: 700px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  input, select { padding: 8px; margin: 5px; border-radius: 4px; border: 1px solid #ccc; }
+  button { padding: 8px 12px; border: none; border-radius: 4px; background-color: #1e3a8a; color: #fff; cursor: pointer; }
+  button:hover { background-color: #374eb8; }
+  ul { padding-left: 20px; margin-top: 10px; }
+  li { margin-bottom: 5px; }
+  .message { font-weight: bold; color: #d97706; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<h1>Shopping Cart</h1>
+<div class="container">
+  <h3>Add Item</h3>
+  <input type="text" id="itemName" placeholder="Item Name">
+  <input type="number" id="itemPrice" placeholder="Price">
+  <input type="number" id="itemID" placeholder="Item ID">
+  <select id="insertPosition">
+    <option value="head">Insert at Head</option>
+    <option value="tail">Insert at Tail</option>
+  </select>
+  <button onclick="addItem()">Add Item</button>
+
+  <h3>Remove Item</h3>
+  <input type="number" id="removeID" placeholder="Item ID to remove">
+  <button onclick="removeItem()">Remove</button>
+
+  <h3>Cart Items</h3>
+  <ul id="cartList"></ul>
+
+  <div class="message" id="message"></div>
+</div>
+
+<script>
+  // Node constructor
+  function Node(id, name, price) {
+    this.id = id;
+    this.name = name;
+    this.price = price;
+    this.next = null;
+  }
+
+  // Linked list cart
+  let head = null;
+
+  function addItem() {
+    const id = parseInt(document.getElementById('itemID').value);
+    const name = document.getElementById('itemName').value.trim();
+    const price = parseFloat(document.getElementById('itemPrice').value);
+    const position = document.getElementById('insertPosition').value;
+    const message = document.getElementById('message');
+
+    if (!id || !name || isNaN(price)) {
+      message.textContent = "Please enter valid item details.";
+      return;
+    }
+
+    const newNode = new Node(id, name, price);
+
+    if (position === "head") {
+      newNode.next = head;
+      head = newNode;
+      message.textContent = `Item '${name}' added at head.`;
+    } else { // insert at tail
+      if (!head) {
+        head = newNode;
+      } else {
+        let temp = head;
+        while (temp.next) temp = temp.next;
+        temp.next = newNode;
+      }
+      message.textContent = `Item '${name}' added at tail.`;
+    }
+    displayCart();
+  }
+
+  function removeItem() {
+    const id = parseInt(document.getElementById('removeID').value);
+    const message = document.getElementById('message');
+    if (!head) {
+      message.textContent = "Cart is empty.";
+      return;
+    }
+
+    if (head.id === id) { // remove head
+      message.textContent = `Item '${head.name}' removed.`;
+      head = head.next;
+      displayCart();
+      return;
+    }
+
+    let current = head;
+    while (current.next && current.next.id !== id) {
+      current = current.next;
+    }
+
+    if (current.next && current.next.id === id) {
+      message.textContent = `Item '${current.next.name}' removed.`;
+      current.next = current.next.next;
+    } else {
+      message.textContent = "Item not found.";
+    }
+    displayCart();
+  }
+
+  function displayCart() {
+    const list = document.getElementById('cartList');
+    list.innerHTML = "";
+    if (!head) {
+      list.innerHTML = "<li>Cart is empty.</li>";
+      return;
+    }
+
+    let temp = head;
+    while (temp) {
+      const li = document.createElement('li');
+      li.textContent = `ID: ${temp.id}, Name: ${temp.name}, Price: $${temp.price.toFixed(2)}`;
+      list.appendChild(li);
+      temp = temp.next;
+    }
+  }
+</script>
+
+</body>
+</html>
