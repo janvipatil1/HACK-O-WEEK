@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Book</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; background: #f0f4f8; }
+  h1 { text-align: center; color: #1e3a8a; }
+  .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  input { padding: 8px; width: 60%; margin: 5px 0; border-radius: 4px; border: 1px solid #ccc; }
+  button { padding: 8px 12px; margin: 5px 0; border-radius: 4px; border: none; background: #1e3a8a; color: #fff; cursor: pointer; }
+  button:hover { background-color: #374eb8; }
+  ul { padding-left: 20px; margin-top: 10px; }
+  li { margin-bottom: 5px; }
+  .message { font-weight: bold; color: #d97706; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<h1>Contact Book</h1>
+<div class="container">
+  <input type="text" id="contactName" placeholder="Enter Name">
+  <input type="text" id="contactPhone" placeholder="Enter Phone">
+  <button onclick="addContact()">Add Contact</button>
+  <button onclick="displayContacts()">Display Contacts</button>
+
+  <hr>
+
+  <input type="text" id="searchName" placeholder="Search Name">
+  <button onclick="searchContact()">Search Contact</button>
+
+  <div class="message" id="message"></div>
+
+  <h3>Contact List:</h3>
+  <ul id="contactList"></ul>
+</div>
+
+<script>
+  let contacts = [];
+
+  function addContact() {
+    const name = document.getElementById('contactName').value.trim();
+    const phone = document.getElementById('contactPhone').value.trim();
+    const message = document.getElementById('message');
+    if (!name || !phone) { message.textContent = "Enter both name and phone."; return; }
+
+    contacts.push({ name, phone });
+
+    // Sort contacts alphabetically by name
+    contacts.sort((a, b) => a.name.localeCompare(b.name));
+
+    message.textContent = `Contact '${name}' added.`;
+    document.getElementById('contactName').value = "";
+    document.getElementById('contactPhone').value = "";
+    displayContacts();
+  }
+
+  function displayContacts() {
+    const list = document.getElementById('contactList');
+    list.innerHTML = "";
+    if (contacts.length === 0) {
+      list.innerHTML = "<li>No contacts available.</li>";
+      return;
+    }
+    contacts.forEach(contact => {
+      const li = document.createElement('li');
+      li.textContent = `${contact.name} - ${contact.phone}`;
+      list.appendChild(li);
+    });
+  }
+
+  function binarySearch(name) {
+    let low = 0, high = contacts.length - 1;
+    while (low <= high) {
+      let mid = Math.floor((low + high) / 2);
+      if (contacts[mid].name.toLowerCase() === name.toLowerCase()) {
+        return mid;
+      } else if (contacts[mid].name.toLowerCase() < name.toLowerCase()) {
+        low = mid + 1;
+      } else {
+        high = mid - 1;
+      }
+    }
+    return -1; // not found
+  }
+
+  function searchContact() {
+    const name = document.getElementById('searchName').value.trim();
+    const message = document.getElementById('message');
+    if (!name) { message.textContent = "Enter a name to search."; return; }
+
+    const index = binarySearch(name);
+    if (index !== -1) {
+      message.textContent = `Found: ${contacts[index].name} - ${contacts[index].phone}`;
+    } else {
+      message.textContent = "Contact not found.";
+    }
+  }
+
+</script>
+
+</body>
+</html>
