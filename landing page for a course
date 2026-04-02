@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Development Bootcamp | Tech Institute</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset and global styles */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Roboto', sans-serif; line-height: 1.6; color: #333; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* Header */
+    header { background: #1e3a8a; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 1.5rem; }
+    nav a { margin-left: 1rem; font-weight: 500; color: #fff; }
+
+    /* Hero Section */
+    .hero { background: url('https://images.unsplash.com/photo-1581093588401-9c8b0f0f3e2c') no-repeat center/cover; color: #fff; text-align: center; padding: 6rem 2rem; }
+    .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+    .hero p { font-size: 1.2rem; margin-bottom: 2rem; }
+    .hero .btn { background: #f59e0b; color: #fff; padding: 0.8rem 2rem; border-radius: 5px; font-weight: bold; transition: 0.3s; }
+    .hero .btn:hover { background: #d97706; }
+
+    /* Sections */
+    section { padding: 4rem 2rem; max-width: 1200px; margin: auto; }
+    h2.section-title { text-align: center; margin-bottom: 2rem; font-size: 2rem; color: #1e3a8a; }
+
+    /* Highlights */
+    .highlights { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 2rem; }
+    .highlight { flex: 1 1 250px; background: #f3f4f6; padding: 2rem; border-radius: 8px; text-align: center; }
+    .highlight h3 { margin-bottom: 1rem; color: #1e3a8a; }
+    .highlight p { font-size: 0.95rem; }
+
+    /* Curriculum */
+    .curriculum ul { list-style-type: disc; padding-left: 1.5rem; }
+    .curriculum li { margin-bottom: 0.8rem; }
+
+    /* Testimonials */
+    .testimonials { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; }
+    .testimonial { background: #e0f2fe; padding: 1.5rem; border-radius: 8px; flex: 1 1 300px; }
+    .testimonial p { font-style: italic; margin-bottom: 1rem; }
+    .testimonial span { font-weight: bold; color: #1e3a8a; }
+
+    /* Call to action */
+    .cta { text-align: center; margin-top: 2rem; }
+    .cta .btn { background: #1e3a8a; color: #fff; padding: 1rem 2rem; border-radius: 5px; font-weight: bold; transition: 0.3s; }
+    .cta .btn:hover { background: #374eb8; }
+
+    /* Footer */
+    footer { background: #111827; color: #fff; text-align: center; padding: 2rem; margin-top: 2rem; }
+    footer a { color: #f59e0b; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .highlights, .testimonials { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>Tech Institute</h1>
+    <nav>
+      <a href="#highlights">Highlights</a>
+      <a href="#curriculum">Curriculum</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#enroll">Enroll</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h2>Master Web Development in 12 Weeks!</h2>
+    <p>Join our intensive bootcamp and become a full-stack web developer with hands-on projects and expert guidance.</p>
+    <a href="#enroll" class="btn">Enroll Now</a>
+  </section>
+
+  <!-- Highlights -->
+  <section id="highlights">
+    <h2 class="section-title">Bootcamp Highlights</h2>
+    <div class="highlights">
+      <div class="highlight">
+        <h3>Hands-on Projects</h3>
+        <p>Build real-world projects to showcase your skills to employers.</p>
+      </div>
+      <div class="highlight">
+        <h3>Expert Mentors</h3>
+        <p>Learn from industry professionals with years of experience.</p>
+      </div>
+      <div class="highlight">
+        <h3>Career Support</h3>
+        <p>Resume building, mock interviews, and job placement assistance.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Curriculum -->
+  <section id="curriculum">
+    <h2 class="section-title">Curriculum</h2>
+    <div class="curriculum">
+      <ul>
+        <li>HTML, CSS, JavaScript fundamentals</li>
+        <li>Front-end frameworks: React.js & Bootstrap</li>
+        <li>Back-end development: Node.js & Express</li>
+        <li>Databases: MongoDB & SQL</li>
+        <li>Version control with Git & GitHub</li>
+        <li>Deployment and cloud basics</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials">
+    <h2 class="section-title">What Our Students Say</h2>
+    <div class="testimonials">
+      <div class="testimonial">
+        <p>"This bootcamp completely changed my career. I landed my first web developer job in 3 months!"</p>
+        <span>- Sarah K.</span>
+      </div>
+      <div class="testimonial">
+        <p>"The mentors were incredibly supportive, and the projects helped me build a strong portfolio."</p>
+        <span>- James L.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta" id="enroll">
+    <h2>Ready to Start Your Web Development Journey?</h2>
+    <a href="#" class="btn">Enroll Today</a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Tech Institute. All Rights Reserved. | <a href="#">Privacy Policy</a></p>
+  </footer>
+
+</body>
+</html>
