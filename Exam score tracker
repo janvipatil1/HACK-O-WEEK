@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exam Score Tracker</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+            background: white;
+            width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+        button {
+            cursor: pointer;
+        }
+        #output {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📊 Exam Score Tracker</h2>
+
+    <input type="number" id="scoreInput" placeholder="Enter score (0-100)">
+    <br>
+
+    <button onclick="addScore()">Add Score</button>
+    <button onclick="displayScores()">Display</button>
+    <button onclick="findMin()">Min</button>
+    <button onclick="findMax()">Max</button>
+    <button onclick="findMode()">Mode</button>
+
+    <div id="output"></div>
+</div>
+
+<script>
+    let scores = [];
+    let freq = new Array(101).fill(0);
+
+    function addScore() {
+        let score = parseInt(document.getElementById("scoreInput").value);
+
+        if (isNaN(score) || score < 0 || score > 100) {
+            alert("Enter valid score (0-100)");
+            return;
+        }
+
+        scores.push(score);
+        freq[score]++;
+
+        document.getElementById("scoreInput").value = "";
+        document.getElementById("output").innerHTML = "Score added!";
+    }
+
+    function displayScores() {
+        if (scores.length === 0) {
+            document.getElementById("output").innerHTML = "No scores available!";
+            return;
+        }
+
+        document.getElementById("output").innerHTML = "Scores: " + scores.join(", ");
+    }
+
+    function findMin() {
+        if (scores.length === 0) return;
+
+        let min = scores[0];
+        for (let i = 1; i < scores.length; i++) {
+            if (scores[i] < min)
+                min = scores[i];
+        }
+
+        document.getElementById("output").innerHTML = "Minimum Score: " + min;
+    }
+
+    function findMax() {
+        if (scores.length === 0) return;
+
+        let max = scores[0];
+        for (let i = 1; i < scores.length; i++) {
+            if (scores[i] > max)
+                max = scores[i];
+        }
+
+        document.getElementById("output").innerHTML = "Maximum Score: " + max;
+    }
+
+    function findMode() {
+        let mode = -1;
+        let maxFreq = 0;
+
+        for (let i = 0; i <= 100; i++) {
+            if (freq[i] > maxFreq) {
+                maxFreq = freq[i];
+                mode = i;
+            }
+        }
+
+        if (mode === -1)
+            document.getElementById("output").innerHTML = "No mode found!";
+        else
+            document.getElementById("output").innerHTML =
+                "Mode: " + mode + " (Frequency: " + maxFreq + ")";
+    }
+</script>
+
+</body>
+</html>
