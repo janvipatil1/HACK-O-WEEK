@@ -1,0 +1,128 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Node structure for directory
+struct Directory {
+    string name;
+    Directory* left;   // First child (subdirectory)
+    Directory* right;  // Next sibling
+
+    Directory(string n) {
+        name = n;
+        left = right = NULL;
+    }
+};
+
+// Create new directory
+Directory* createDir(string name) {
+    return new Directory(name);
+}
+
+// Insert subdirectory under a parent
+Directory* insertSubDir(Directory* root, string parent, string child) {
+    if (root == NULL)
+        return NULL;
+
+    // If parent found
+    if (root->name == parent) {
+        Directory* newDir = createDir(child);
+
+        // If no child exists
+        if (root->left == NULL) {
+            root->left = newDir;
+        } else {
+            // Add as sibling
+            Directory* temp = root->left;
+            while (temp->right != NULL)
+                temp = temp->right;
+            temp->right = newDir;
+        }
+        return root;
+    }
+
+    // Search in child and sibling
+    insertSubDir(root->left, parent, child);
+    insertSubDir(root->right, parent, child);
+
+    return root;
+}
+
+// Preorder Traversal
+void preorder(Directory* root) {
+    if (root == NULL) return;
+
+    cout << root->name << " ";
+    preorder(root->left);
+    preorder(root->right);
+}
+
+// Inorder Traversal
+void inorder(Directory* root) {
+    if (root == NULL) return;
+
+    inorder(root->left);
+    cout << root->name << " ";
+    inorder(root->right);
+}
+
+// Postorder Traversal
+void postorder(Directory* root) {
+    if (root == NULL) return;
+
+    postorder(root->left);
+    postorder(root->right);
+    cout << root->name << " ";
+}
+
+// Menu
+int main() {
+    Directory* root = createDir("root");
+    int choice;
+    string parent, child;
+
+    while (true) {
+        cout << "\n--- File System Directory ---\n";
+        cout << "1. Insert Subdirectory\n";
+        cout << "2. Preorder Traversal\n";
+        cout << "3. Inorder Traversal\n";
+        cout << "4. Postorder Traversal\n";
+        cout << "5. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter parent directory: ";
+                cin >> parent;
+                cout << "Enter new subdirectory: ";
+                cin >> child;
+                insertSubDir(root, parent, child);
+                break;
+
+            case 2:
+                cout << "Preorder: ";
+                preorder(root);
+                cout << endl;
+                break;
+
+            case 3:
+                cout << "Inorder: ";
+                inorder(root);
+                cout << endl;
+                break;
+
+            case 4:
+                cout << "Postorder: ";
+                postorder(root);
+                cout << endl;
+                break;
+
+            case 5:
+                exit(0);
+
+            default:
+                cout << "Invalid choice!\n";
+        }
+    }
+}
