@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Task Manager Pro</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+    }
+
+    .container {
+        width: 420px;
+        backdrop-filter: blur(15px);
+        background: rgba(255,255,255,0.05);
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+    }
+
+    .input-area {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+    }
+
+    button {
+        padding: 10px 12px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: bold;
+    }
+
+    .add-btn {
+        background: #00c6ff;
+        color: black;
+    }
+
+    .undo-btn { background: #ff9800; }
+    .redo-btn { background: #4caf50; }
+
+    button:hover {
+        transform: scale(1.1);
+        opacity: 0.9;
+    }
+
+    ul {
+        list-style: none;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    li {
+        background: rgba(255,255,255,0.08);
+        margin: 10px 0;
+        padding: 12px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: fadeIn 0.3s ease;
+    }
+
+    li span {
+        flex: 1;
+    }
+
+    .actions button {
+        margin-left: 5px;
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+
+    .edit { background: #2196f3; }
+    .delete { background: #f44336; }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2> Task Manager </h2>
+
+    <div class="input-area">
+        <input type="text" id="taskInput" placeholder="Add a task...">
+        <button class="add-btn" onclick="addTask()">+</button>
+    </div>
+
+    <div style="text-align:center; margin-bottom:10px;">
+        <button class="undo-btn" onclick="undo()">Undo</button>
+        <button class="redo-btn" onclick="redo()">Redo</button>
+    </div>
+
+    <ul id="taskList"></ul>
+</div>
+
+<script>
+    let tasks = [];
+    let undoStack = [];
+    let redoStack = [];
+
+    function render() {
+        const list = document.getElementById("taskList");
+        list.innerHTML = "";
+
+        tasks.forEach((task, index) => {
+            const li = document.createElement("li");
+
+            li.innerHTML = `
+                <span>${task}</span>
+                <div class="actions">
+                    <button class="edit" onclick="editTask(${index})">Edit</button>
+                    <button class="delete" onclick="deleteTask(${index})">Delete</button>
+                </div>
+            `;
+
+            list.appendChild(li);
+        });
+    }
+
+    function saveState() {
+        undoStack.push([...tasks]);
+        redoStack = [];
+    }
+
+    function addTask() {
+        const input = document.getElementById("taskInput");
+        if (input.value.trim() === "") return;
+
+        saveState();
+        tasks.push(input.value);
+        input.value = "";
+        render();
+    }
+
+    function deleteTask(index) {
+        saveState();
+        tasks.splice(index, 1);
+        render();
+    }
+
+    function editTask(index) {
+        const newTask = prompt("Edit task:", tasks[index]);
+        if (newTask && newTask.trim() !== "") {
+            saveState();
+            tasks[index] = newTask;
+            render();
+        }
+    }
+
+    function undo() {
+        if (undoStack.length === 0) return;
+
+        redoStack.push([...tasks]);
+        tasks = undoStack.pop();
+        render();
+    }
+
+    function redo() {
+        if (redoStack.length === 0) return;
+
+        undoStack.push([...tasks]);
+        tasks = redoStack.pop();
+        render();
+    }
+</script>
+
+</body>
+</html>
