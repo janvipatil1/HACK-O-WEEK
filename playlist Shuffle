@@ -1,0 +1,177 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Node structure
+struct Song {
+    string name;
+    Song* prev;
+    Song* next;
+};
+
+// Head pointer
+Song* head = NULL;
+
+// Create new song node
+Song* createSong(string name) {
+    Song* newSong = new Song;
+    newSong->name = name;
+    newSong->prev = NULL;
+    newSong->next = NULL;
+    return newSong;
+}
+
+// Add at front
+void addFront(string name) {
+    Song* newSong = createSong(name);
+
+    if (head == NULL) {
+        head = newSong;
+        return;
+    }
+
+    newSong->next = head;
+    head->prev = newSong;
+    head = newSong;
+}
+
+// Add at end
+void addEnd(string name) {
+    Song* newSong = createSong(name);
+
+    if (head == NULL) {
+        head = newSong;
+        return;
+    }
+
+    Song* temp = head;
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = newSong;
+    newSong->prev = temp;
+}
+
+// Delete by position
+void deleteAtPosition(int pos) {
+    if (head == NULL) {
+        cout << "Playlist is empty!\n";
+        return;
+    }
+
+    Song* temp = head;
+
+    // Deleting first node
+    if (pos == 1) {
+        head = temp->next;
+        if (head != NULL)
+            head->prev = NULL;
+        delete temp;
+        return;
+    }
+
+    for (int i = 1; temp != NULL && i < pos; i++)
+        temp = temp->next;
+
+    if (temp == NULL) {
+        cout << "Invalid position!\n";
+        return;
+    }
+
+    if (temp->next != NULL)
+        temp->next->prev = temp->prev;
+
+    if (temp->prev != NULL)
+        temp->prev->next = temp->next;
+
+    delete temp;
+}
+
+// Reverse playlist (Shuffle)
+void reversePlaylist() {
+    Song* temp = NULL;
+    Song* current = head;
+
+    while (current != NULL) {
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+        current = current->prev;
+    }
+
+    if (temp != NULL)
+        head = temp->prev;
+
+    cout << "Playlist shuffled (reversed)!\n";
+}
+
+// Display playlist
+void display() {
+    if (head == NULL) {
+        cout << "Playlist is empty!\n";
+        return;
+    }
+
+    Song* temp = head;
+    int i = 1;
+
+    cout << "\n--- Playlist ---\n";
+    while (temp != NULL) {
+        cout << i++ << ". " << temp->name << endl;
+        temp = temp->next;
+    }
+}
+
+// Main menu
+int main() {
+    int choice, pos;
+    string name;
+
+    while (true) {
+        cout << "\n===== Playlist Menu =====\n";
+        cout << "1. Add Song at Front\n";
+        cout << "2. Add Song at End\n";
+        cout << "3. Delete Song by Position\n";
+        cout << "4. Shuffle Playlist (Reverse)\n";
+        cout << "5. Display Playlist\n";
+        cout << "6. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter song name: ";
+                cin.ignore();
+                getline(cin, name);
+                addFront(name);
+                break;
+
+            case 2:
+                cout << "Enter song name: ";
+                cin.ignore();
+                getline(cin, name);
+                addEnd(name);
+                break;
+
+            case 3:
+                cout << "Enter position to delete: ";
+                cin >> pos;
+                deleteAtPosition(pos);
+                break;
+
+            case 4:
+                reversePlaylist();
+                break;
+
+            case 5:
+                display();
+                break;
+
+            case 6:
+                return 0;
+
+            default:
+                cout << "Invalid choice!\n";
+        }
+    }
+}
