@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ATM Queue Simulator</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        background: linear-gradient(135deg, #141e30, #243b55);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+    }
+
+    .container {
+        width: 500px;
+        padding: 25px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.05);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        text-align: center;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    input {
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        width: 60%;
+    }
+
+    button {
+        padding: 10px 15px;
+        margin: 5px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: bold;
+    }
+
+    .add { background: #00c6ff; color: black; }
+    .serve { background: #4caf50; }
+    .reset { background: #f44336; }
+
+    button:hover {
+        transform: scale(1.1);
+    }
+
+    .queue {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .customer {
+        padding: 12px 18px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+        animation: pop 0.3s ease;
+    }
+
+    .status {
+        margin-top: 15px;
+        font-weight: bold;
+        color: #ffcc00;
+    }
+
+    @keyframes pop {
+        from { transform: scale(0.5); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2> ATM Queue Simulator</h2>
+
+    <input type="text" id="customerInput" placeholder="Enter customer name">
+
+    <div>
+        <button class="add" onclick="enqueue()">Add Customer</button>
+        <button class="serve" onclick="dequeue()">Serve Customer</button>
+        <button class="reset" onclick="resetQueue()">Reset</button>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="queue" id="queueDisplay"></div>
+</div>
+
+<script>
+    const size = 5;
+    let queue = new Array(size);
+    let front = -1;
+    let rear = -1;
+
+    function isFull() {
+        return (front === (rear + 1) % size);
+    }
+
+    function isEmpty() {
+        return (front === -1);
+    }
+
+    function enqueue() {
+        let name = document.getElementById("customerInput").value;
+        if (name.trim() === "") return;
+
+        if (isFull()) {
+            setStatus("⚠ Queue is FULL!");
+            return;
+        }
+
+        if (front === -1) front = 0;
+        rear = (rear + 1) % size;
+        queue[rear] = name;
+
+        setStatus("Customer Added");
+        document.getElementById("customerInput").value = "";
+        render();
+    }
+
+    function dequeue() {
+        if (isEmpty()) {
+            setStatus("⚠ Queue is EMPTY!");
+            return;
+        }
+
+        let served = queue[front];
+
+        if (front === rear) {
+            front = rear = -1;
+        } else {
+            front = (front + 1) % size;
+        }
+
+        setStatus(" Served: " + served);
+        render();
+    }
+
+    function resetQueue() {
+        queue = new Array(size);
+        front = rear = -1;
+        setStatus(" Queue Reset");
+        render();
+    }
+
+    function render() {
+        let display = document.getElementById("queueDisplay");
+        display.innerHTML = "";
+
+        if (isEmpty()) return;
+
+        let i = front;
+        while (true) {
+            let div = document.createElement("div");
+            div.className = "customer";
+            div.innerText = queue[i];
+            display.appendChild(div);
+
+            if (i === rear) break;
+            i = (i + 1) % size;
+        }
+    }
+
+    function setStatus(msg) {
+        document.getElementById("status").innerText = msg;
+    }
+</script>
+
+</body>
+</html>
